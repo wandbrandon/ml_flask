@@ -5,12 +5,6 @@ import keras_core
 import numpy as np
 from flask import Flask, request, jsonify
 from PIL import Image
-from google.cloud import storage
-
-storage_client = storage.Client()
-bucket = storage_client.get_bucket("mri_brain_tumor_classification")
-blob = bucket.blob("weight2.weights.h5")
-blob.download_to_filename("/tmp/weight2.weights.h5")
 
 mappings = ["Glioma", "Meningioma", "No Tumor", "Pituitary"]
 
@@ -42,7 +36,7 @@ model = keras_core.Sequential(
     ]
 )
 
-model.load_weights("/tmp/weight2.weights.h5")
+model.load_weights("weight2.weights.h5")
 
 print("Compiling Model...")
 model.compile(
