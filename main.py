@@ -6,6 +6,13 @@ import numpy as np
 from flask import Flask, request, jsonify
 from PIL import Image
 
+# storage_client = storage.Client()
+# bucket = storage_client.get_bucket("mri_brain_tumor_classification")
+# blob1 = bucket.blob("weight2.weights.h5")
+# blob1.download_to_filename("/tmp/weight2.weights.h5")
+# blob2 = bucket.blob("efficientnetb3_notop.h5 ")
+# blob2.download_to_filename("/tmp/weight2.weights.h5")
+
 mappings = ["Glioma", "Meningioma", "No Tumor", "Pituitary"]
 
 print("Loading model...")
