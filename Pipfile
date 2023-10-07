@@ -9,8 +9,7 @@ keras-core = "*"
 numpy = "*"
 flask = "*"
 pillow = "*"
-"google.cloud" = "*"
-google-cloud = "*"
+google-cloud-storage = "*"
 
 [dev-packages]
 
