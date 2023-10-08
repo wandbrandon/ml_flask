@@ -1,3 +1,4 @@
+import json
 import os
 
 os.environ["KERAS_BACKEND"] = "torch"
@@ -5,17 +6,15 @@ import keras_core
 import numpy as np
 from flask import Flask, request, jsonify
 from PIL import Image
+from google.cloud import storage
 
-# storage_client = storage.Client()
-# bucket = storage_client.get_bucket("mri_brain_tumor_classification")
-# blob1 = bucket.blob("weight2.weights.h5")
-# blob1.download_to_filename("/tmp/weight2.weights.h5")
-# blob2 = bucket.blob("efficientnetb3_notop.h5 ")
-# blob2.download_to_filename("/tmp/weight2.weights.h5")
+storage_client = storage.Client()
+bucket = storage_client.get_bucket("mri_brain_tumor_classification")
+blob1 = bucket.blob("weight2.weights.h5")
 
 mappings = ["Glioma", "Meningioma", "No Tumor", "Pituitary"]
 
-print("Loading model...")
+print("Loading base model...")
 base_model = keras_core.applications.efficientnet.EfficientNetB3(
     weights="imagenet",  # Load weights pre-trained on ImageNet.
     input_shape=(256, 256, 3),
@@ -23,6 +22,7 @@ base_model = keras_core.applications.efficientnet.EfficientNetB3(
     pooling="max",
 )
 
+print("Creating Sequential Model...")
 model = keras_core.Sequential(
     [
         keras_core.layers.Input(shape=(256, 256, 3)),
@@ -43,6 +43,7 @@ model = keras_core.Sequential(
     ]
 )
 
+print("Load Weights...")
 model.load_weights("weight2.weights.h5")
 
 print("Compiling Model...")
@@ -51,6 +52,7 @@ model.compile(
     loss="categorical_crossentropy",
     metrics=["accuracy"],
 )
+
 
 app = Flask(__name__)
 
